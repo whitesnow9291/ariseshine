@@ -1,0 +1,68 @@
+extends ../layout
+
+block styles
+  link(rel='styleSheet' href='stylesheets/moneytransfer/index.css')
+  link(href="x-bootstrap-wizard-v1.1/assets/css/gsdk-base.css" rel="stylesheet")
+block scripts
+  script(src="x-bootstrap-wizard-v1.1/assets/js/jquery.bootstrap.wizard.js")
+  script(src="x-bootstrap-wizard-v1.1/assets/js/jquery.validate.min.js")
+  script(src="x-bootstrap-wizard-v1.1/assets/js/wizard.js")
+block content
+  .row
+    .row.col-md-6.col-sm-offset-3.text-center.graphic_content
+      h3
+        | GRAPHIC
+        | INTERNATIONAL MONEY TRANSFER
+        | LINK TO DOWNLOAD APP
+        | (hyperlinked to Money Transfer Sub-page)
+    .row.col-md-6.col-sm-offset-3.text-center.link_content
+      h3
+        | LINK TO DOWNLOAD APP
+        | (Launch transfer app)
+    .wizard-container.col-sm-10.col-sm-offset-1
+      #wizardProfile.card.wizard-card.ct-wizard-orange
+        form(action='', method='')
+          .wizard-header
+            h3
+              |Step 1 : Choose
+              |where to send
+              |money
+          ul
+            li
+              a(href='#step1', data-toggle='tab') Step1
+            li
+              a(href='#step2', data-toggle='tab') Step2
+            li
+              a(href='#step3', data-toggle='tab') Step3
+          .tab-content
+            #step1.tab-pane
+              h2
+                |Country Sub-pages
+              h4
+                |• Country name
+              h4
+                |• Currency and exchange rate
+              h4
+                |• Recipient Locations/Banks/Partners
+              h4
+                |• Calling card companies
+              h4
+                |• Calling charges
+            #step2.tab-pane
+              h4
+                |• Go-to sign-up sub-page if not already signed
+              h4
+                |up for money transfer
+              h4
+                |• Select how to add funds
+            #step3.tab-pane
+              h4.info-text  Step 3: Pay for Transfer
+          .wizard-footer
+            .pull-right
+              input.btn.btn-next.btn-fill.btn-warning.btn-wd.btn-sm(type='button', name='next', value='Next')
+              |
+              input.btn.btn-finish.btn-fill.btn-warning.btn-wd.btn-sm(type='button', name='finish', value='Finish')
+            .pull-left
+              input.btn.btn-previous.btn-fill.btn-default.btn-wd.btn-sm(type='button', name='previous', value='Previous')
+            .clearfix
+

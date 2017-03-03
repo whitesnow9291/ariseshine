@@ -1,0 +1,122 @@
+doctype html
+//if lt IE 7
+  html.no-js.lt-ie9.lt-ie8.lt-ie7
+//if IE 7
+  html.no-js.lt-ie9.lt-ie8
+//if IE 8
+  html.no-js.lt-ie9
+// [if gt IE 8] <!
+html.no-js
+  // <![endif]
+  head
+    meta(charset='utf-8')
+    title AriseShine
+    meta(name='description', content='')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    link(href='/Pivot 2.0.3/css/flexslider.min.css', rel='stylesheet', type='text/css', media='all')
+    link(href='/Pivot 2.0.3/css/line-icons.min.css', rel='stylesheet', type='text/css', media='all')
+    link(href='/Pivot 2.0.3/css/elegant-icons.min.css', rel='stylesheet', type='text/css', media='all')
+    link(href='/Pivot 2.0.3/css/lightbox.min.css', rel='stylesheet', type='text/css', media='all')
+    link(href='/Pivot 2.0.3/css/bootstrap.min.css', rel='stylesheet', type='text/css', media='all')
+    link(href='/Pivot 2.0.3/css/theme-blues.css', rel='stylesheet', type='text/css', media='all')
+    link(href='/Pivot 2.0.3/css/custom.css', rel='stylesheet', type='text/css', media='all')
+    //if gte IE 9
+      link(rel='stylesheet', type='text/css', href='Pivot 2.0.3/css/ie9.css')
+    link(href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,400,300,600,700%7CRaleway:700', rel='stylesheet', type='text/css')
+
+    //custom style
+    link(href='/stylesheets/style.css', rel='stylesheet', type='text/css', media='all')
+    block styles
+    script(src='/Pivot 2.0.3/js/modernizr-2.6.2-respond-1.1.0.min.js')
+  body
+    .loader
+      .spinner
+        .double-bounce1
+        .double-bounce2
+    .nav-container
+      nav.top-bar.overlay-bar
+        .container
+          .row.utility-menu
+            .col-sm-12
+              .utility-inner.clearfix
+                span.alt-font
+                  i.icon.icon_pin
+                  |  300 Collins St Melbourne
+                span.alt-font
+                  i.icon.icon_mail
+                  |  hello@pivot.net
+                .pull-right
+                  a.btn.btn-primary.login-button.btn-xs(href='login.html') Login
+                  |
+                  a.btn.btn-primary.btn-filled.btn-xs(href='#') Signup
+                  //
+                    |
+                    a.language(href='#')
+                      img(alt='English', src='/Pivot 2.0.3/img/english.png')
+                    |
+                    a.language(href='#')
+                      img(alt='English', src='/Pivot 2.0.3/img/denmark.png')
+          .row.nav-menu
+            .col-sm-2.col-md-1.columns
+              a(href='/')
+                img.logo-light(alt='Logo', src='/images/home/Arise_72.png')
+                |
+                img.logo-dark(alt='Logo', src='/images/home/Arise_72.png')
+
+            .col-sm-9.col-md-10.columns.text-center
+              ul.menu
+                li
+                  a(href='/' class={active: title=='Home Page'}) Home Page
+                li
+                  a(href='aboutus' class={active: title=='About US'}) About Us
+                li
+                  a(href='moneytransfer'  class={active: title=='Money Transfer'}) Money Transfer
+                li
+                  a(href='internetionalcall'  class={active: title=='International Calls'}) International Calls
+                li
+                  a(href='policiesprocedures' class={active: title=='Policies and Procedures'}) Policies and Procedures
+                li.has-dropdown
+                  a(href='myaccount/index' class={active: title=='My account'}) My account
+                  ul.subnav
+                    li
+                      a(href='myaccount/index') About Us
+          .mobile-toggle
+            i.icon.icon_menu
+    block content
+    .footer-container
+      footer.bg-primary.short-2
+        .container
+          .row
+            .col-sm-12
+              span.text-white &copy; 2017 AriseShine Inc.
+              |
+              span.text-white
+                a(href='#') hello@ariseshine.net
+              |
+              span.text-white +xxx 1234 567
+              |
+              span.text-white 300 Collins St. Melbourne 3000
+        .contact-action
+          .align-vertical
+            i.icon.text-white.icon_mail
+            |
+            a.text-white(href='contact.html')
+              span.text-white
+                | Get in touch with us
+                i.icon.arrow_right
+
+    script(src='/Pivot 2.0.3/js/jquery.min.js')
+    script(src='/Pivot 2.0.3/js/jquery.plugin.min.js')
+    script(src='/Pivot 2.0.3/js/bootstrap.min.js')
+    script(src='/Pivot 2.0.3/js/jquery.flexslider-min.js')
+    script(src='/Pivot 2.0.3/js/smooth-scroll.min.js')
+    script(src='/Pivot 2.0.3/js/skrollr.min.js')
+    script(src='/Pivot 2.0.3/js/spectragram.min.js')
+    script(src='/Pivot 2.0.3/js/scrollReveal.min.js')
+    script(src='/Pivot 2.0.3/js/isotope.min.js')
+    script(src='/Pivot 2.0.3/js/twitterFetcher_v10_min.js')
+    script(src='/Pivot 2.0.3/js/lightbox.min.js')
+    script(src='/Pivot 2.0.3/js/jquery.countdown.min.js')
+    script(src='/Pivot 2.0.3/js/scripts.js')
+    block scripts
