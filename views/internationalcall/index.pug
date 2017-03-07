@@ -1,20 +1,24 @@
 extends ../layout
-
+block styles
+  link(href='stylesheets/internationalcall/index.css', rel='stylesheet', type='text/css', media='all')
+  link(rel='stylesheet', href='/intl-phone/css/intlTelInput.css')
+block scripts
+  script(src='/intl-phone/js/intlTelInput.min.js')
+  script(src='/javascripts/internationalcall/internationalcall.js')
 block content
-    div.container
-     div.col-md-6
-        p
-            | GRAPHIC
-            | INTERNATIONAL MONEY TRANSFER
-            | LINK TO DOWNLOAD APP
-            | (hyperlinked to Money Transfer Sub-page)
-     div.col-md-6
-         p
-            | GRAPHIC
-            | CHEAP INTERNATIONAL PHONE CALLS
-            | LINK TO DOWNLOAD APP
-            | (Hyperlinked to International Calls subpage)
-     div.col-md-6
-         p
-            | Leave blank for now – for a summary paragraph
-
+  h1
+  .container
+    // C2C contact form
+    .row
+      .col-md-12
+        form(id='contactForm', role='form')
+          label Your Number
+          .form-group
+            input.form-control(type='text', id='phoneNumber',
+              placeholder='(651) 555-7889')
+          label Sales Team Number
+          .form-group
+            input.form-control(type='text', id='salesNumber',
+              placeholder='(651) 555-7889')
+          button(type='submit', class='btn btn-primary') Contact
+  h1

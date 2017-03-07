@@ -1,0 +1,13 @@
+.top-bar {
+  position: static;
+  background: teal; }
+
+@media only screen and (max-width: 767px) and (min-width: 320px) {
+  .top-bar .menu li a {
+    color: white; } }
+
+section:nth-of-type(odd) {
+  background: transparent !important; }
+
+.photo-form-wrapper input {
+  background: rgba(0, 128, 128, 0.24); }
