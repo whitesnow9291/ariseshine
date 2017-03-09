@@ -44,9 +44,9 @@ html.no-js
                   i.icon.icon_mail
                   |  hello@ariseshine.net
                 .pull-right
-                  a.btn.btn-primary.login-button.btn-xs(href='login.html') Login
+                  a.btn.btn-primary.login-button.btn-xs(href='/auth/login') Login
                   |
-                  a.btn.btn-primary.btn-filled.btn-xs(href='#') Signup
+                  a.btn.btn-primary.btn-filled.btn-xs(href='/auth/signup') Signup
           .row.nav-menu
             .col-sm-2.col-md-1.columns
               a(href='/')
@@ -70,7 +70,9 @@ html.no-js
                   a(href='myaccount' class={active: title=='My account'}) My account
                   ul.subnav
                     li
-                      a(href='myaccount') About Us
+                      a(href='/myaccount/addfund') Add fund
+                    li
+                      a(href='/') About Us
           .mobile-toggle
             i.icon.icon_menu
     .main-container

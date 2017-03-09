@@ -18,29 +18,24 @@ block content
         .col-sm-3.pull-left.step_course
           ul
             li.text-left
-              a(href='#step1', data-toggle='tab') Step 1 : Create a User
+              a(href='#step1', data-toggle='tab') Step 1 : Create a Transfer Method
             li.text-left
-              a(href='#step2', data-toggle='tab') Step 2 : Create a Transfer Method
-            li.text-left
-              a(href='#step3', data-toggle='tab') Step 3: Create a Payment
+              a(href='#step2', data-toggle='tab') Step 2 : Fund money
             li.text-left
               a(href='#step_complete', data-toggle='tab') Completed
         .tab-content.col-sm-8.pull-right
           #step1.tab-pane
             include step1.pug
           #step2.tab-pane
-            //
-              include step2.pug
-          #step3.tab-pane
-            //
-              include step3.pug
+            include step2.pug
           #step_complete.tab-pane
             include step_complete.pug
         .clearfix
         .wizard-footer.clearfix
           .pull-right
-            input.btn.btn-next.btn-primary(type='button', name='next', value='Next')
-            |
+            //
+              input.btn.btn-next.btn-primary(type='button', name='next', value='Next')
+              |
             input.btn.btn-finish.btn-primary(type='hidden', name='finish', value='Finish')
           //
             .pull-right

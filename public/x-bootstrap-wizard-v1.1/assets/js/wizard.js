@@ -1,11 +1,11 @@
 searchVisible = 0;
 transparent = true;
-
+var step_widzard = null;
 $(document).ready(function(){
     /*  Activate the tooltips      */
     $('[rel="tooltip"]').tooltip();
 
-    $('.wizard-card').bootstrapWizard({
+    step_widzard = $('.wizard-card').bootstrapWizard({
         'tabClass': 'nav nav-pills',
         'nextSelector': '.btn-next',
         'previousSelector': '.btn-previous',
@@ -55,7 +55,7 @@ $(document).ready(function(){
                 $(wizard).find('.btn-finish').hide();
             }
 
-            var title = ['Step 1 : Create a User','Step 2 : Create a Transfer Method','Step 3: Create a Payment',''];
+            var title = ['Step 1 : Create a Transfer Method','Step 2 : Fund money',''];
             $('.wizard-header h3').text(title[index]);
         }
     });

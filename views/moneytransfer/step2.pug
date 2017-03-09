@@ -1,2 +1,42 @@
-form(action='https://my-server.com', method='POST')
-  script.hw-form-transfer-methods(src='https://api.sandbox.hyperwallet.com/rest/widgets/transfer-methods/usr-3f74881f-d4a1-4ffb-8810-a2ae1b01a86e/en.min.js', data-hw-template='bootstrap3', data-hw-skipprofilefields='true', data-hw-transfermethodconfiguration='{"profileType": "INDIVIDUAL"}')
+form#payment-form(action="/myaccount/addfund/checkouts", method="post")
+  section
+    .bt-drop-in-wrapper
+      #bt-dropin
+
+    label(for="amount")
+      span.input-label Amount
+      .input-wrapper.amount-wrapper
+        input#amount(name="amount" type="tel" min="1" placeholder="Amount" value="10")
+
+  button.btn.btn-primary.button(type="submit")
+    span Test Transaction
+script(src="https://js.braintreegateway.com/js/braintree-2.27.0.min.js")
+script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js")
+script.
+  (function () {
+    var token = "#{clientToken}";
+
+    braintree.setup(token, "dropin", {
+      container: "bt-dropin",
+      onPaymentMethodReceived: function(res){
+        var payment_method_nonce=res.nonce;
+        var amount = $('#amount').val();
+        $.ajax({
+          type: "POST",
+          url: '/moneytransfer/post_moneytransfer',
+          data: {'payment_method_nonce':payment_method_nonce,'amount':amount},
+          success: function(json){
+            if (json.result==1){
+              step_widzard.bootstrapWizard('next');
+            }else{
+              alert(json.msg);
+            }
+          },
+          error:function(error){
+            alert(error);
+          },
+          dataType: 'json'
+        });
+      }
+    });
+  })()

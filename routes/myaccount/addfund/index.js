@@ -3,7 +3,7 @@
 var express = require('express');
 var braintree = require('braintree');
 var router = express.Router(); // eslint-disable-line new-cap
-var gateway = require('./lib/gateway');
+var gateway = require('../../../config/braintree/gateway');
 
 var TRANSACTION_SUCCESS_STATUSES = [
   braintree.Transaction.Status.Authorizing,
