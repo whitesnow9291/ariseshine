@@ -6,3 +6,7 @@
         color: white;
     }
   }
+section:nth-of-type(odd){
+  background: transparent !important;
+  margin:100px auto;
+}

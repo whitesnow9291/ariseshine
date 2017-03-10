@@ -77,7 +77,11 @@ var auth = require('./routes/auth/index');
 var home = require('./routes/home/index');
 var aboutus = require('./routes/aboutus/index');
 var moneytransfer = require('./routes/moneytransfer/index');
+
 var internationalcall = require('./routes/internationalcall/index');
+var token = require('./routes/internationalcall/token');
+var call = require('./routes/internationalcall/call');
+
 var policiesprocedures = require('./routes/policiesprocedures/index');
 var myaccount = require('./routes/myaccount/index');
 var users = require('./routes/users');
@@ -88,7 +92,11 @@ app.use('/auth', auth);
 app.use('/aboutus', aboutus);
 app.use('/users', users);
 app.use('/moneytransfer', moneytransfer);
+
 app.use('/internationalcall', internationalcall);
+app.use('/internationalcall/token', token);
+app.use('/internationalcall/call', call);
+
 app.use('/policiesprocedures', policiesprocedures);
 app.use('/myaccount/addfund/', addfund);
 
