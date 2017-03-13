@@ -7,6 +7,8 @@ $(function(){
   $('label.token_label').hide();
   $('input.token').hide();
   $('.btn_sendcode').click(function(){
+    $('label.token_label').show();
+    $('input.token').show();return;
     var id = $('#userid').val();
     var countryData = $("#phoneNumber").intlTelInput("getSelectedCountryData");
     var phoneNumber = $("#phoneNumber").val();

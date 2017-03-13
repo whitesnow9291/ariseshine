@@ -14,7 +14,7 @@ require('./config/passport')(passport); // pass passport for configuration
 var flash = require('connect-flash');
 var configDB = require('./config/database.js');
 var mongoose = require('mongoose');
-mongoose.connect(configDB.url); // connect to our database
+//mongoose.connect(configDB.url); // connect to our database
 
 var app = express();
 

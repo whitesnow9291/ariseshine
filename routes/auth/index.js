@@ -18,6 +18,7 @@ router.get('/signup', function (req, res, next) {
 //   failureFlash : true // allow flash messages
 // }));
 router.post('/signup', function (req, res, next) {
+  return res.render('auth/phoneverify2', {title: 'Signup Page'});
     var fullname = req.body.fullname;
     var email = req.body.email;
     var password = req.body.password;
