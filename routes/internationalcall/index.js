@@ -1,7 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var twilio = require('twilio');
-var client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
+var twilioconf = require('../../config/twilio/twilioconf');
+var client = twilio(twilioconf.TWILIO_ACCOUNT_SID, twilioconf.TWILIO_AUTH_TOKEN);
 /* GET home page. */
 router.get('/', function(req, res, next) {
 
@@ -9,7 +10,7 @@ router.get('/', function(req, res, next) {
 });
 router.post('/call', function(request, response) {
     console.log('calling...');
-    var twilioNumber = process.env.TWILIO_NUMBER;
+    var twilioNumber = twilioconf.TWILIO_NUMBER;
     // This should be the publicly accessible URL for your application
     // Here, we just use the host for the application making the request,
     // but you can hard code it or use something different if need be
