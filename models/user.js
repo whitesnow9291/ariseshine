@@ -1,6 +1,10 @@
 var mongoose = require('mongoose');
 var bcrypt = require('bcrypt');
+var auth = require('../config/auth');
 
+// Create authenticated Authy and Twilio API clients
+var authy = require('authy')(auth.AUTHY_API_KEY);
+// var twilioClient = require('twilio')(config.accountSid, config.authToken);
 var db = mongoose.connection;
 
 // User Schema
@@ -18,9 +22,8 @@ var db = mongoose.connection;
 //     "authyId" : "28867505"
 // }
 var UserSchema = mongoose.Schema({
-    fullName: {
+    fullname: {
         type: String,
-        index: true
     },
     email: {
         type: String
@@ -74,13 +77,64 @@ module.exports.getUserByUsername = function(username, callback){
 }
 
 module.exports.createUser = function(newUser,callback){
-    bcrypt.hash(newUser.password, 10, function(err, hash){
-        if(err) throw err;
+    User.findOne({ 'email' :  newUser.email }, function(err, user) {
+        // if there are any errors, return the error before anything else
+        var errors = null;
+        if (err){
+          errors=err;
+        }
+        if (user){
+          errors='same email already exist!';
+        }
+        if (!user){
+          bcrypt.hash(newUser.password, 10, function(err, hash){
+              if(err) throw err;
 
-        // Set Hashed password
-        newUser.password = hash;
+              // Set Hashed password
+              newUser.password = hash;
 
-        // Create User
-        newUser.save(callback);
+              // Create User
+              newUser.save(callback);
+          });
+          return;
+        }
+        callback(errors,null);
     });
+};
+// Send a verification token to this user
+module.exports.sendAuthyToken = function(userid,phoneNumber,countryCode,cb) {
+  User.findOne({ '_id' :  userid }, function(err, user) {
+      // if there are any errors, return the error before anything else
+      var errors = null;
+      if (err){
+        errors=err;
+        return callback(errors,null);
+      }
+      if (!user.authyId) {
+          // Register this user if it's a new user
+          console.log(phoneNumber);
+          authy.register_user(user.email, phoneNumber, countryCode,
+              function(err, response) {
+              if (err || !response.user) return cb.call(user, err);
+              user.authyId = response.user.id;
+              user.save(function(err, doc) {
+                  if (err || !doc) return cb.call(this, err);
+                  user = doc;
+                  sendToken();
+              });
+          });
+      } else {
+          // Otherwise send token to a known user
+          sendToken();
+      }
+
+      // With a valid Authy ID, send the 2FA token for this user
+      function sendToken() {
+          authy.request_sms(user.authyId, true, function(err, response) {
+              cb.call(this, err);
+          });
+      }
+  });
+
+
 };

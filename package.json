@@ -6,9 +6,11 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "authy": "^1.2.0",
     "bcrypt": "^1.0.2",
     "body-parser": "~1.16.0",
     "braintree": "^2.0.2",
+    "connect": "^3.6.0",
     "connect-flash": "^0.1.1",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.0",
@@ -23,6 +25,11 @@
     "passport-local": "^1.0.0",
     "pug": "~2.0.0-beta10",
     "serve-favicon": "~2.3.2",
+    "session-mongoose": "^0.5.2",
+    "toastr": "^2.1.2",
     "twilio": "^2.11.1"
+  },
+  "devDependencies": {
+    "concurrently": "^3.4.0"
   }
 }

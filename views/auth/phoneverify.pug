@@ -2,9 +2,12 @@ extends ../layout
 block styles
   link(href='/stylesheets/auth/phoneverify.css', rel='stylesheet', type='text/css', media='all')
   link(rel='stylesheet', href='/intl-phone/css/intlTelInput.css')
+  link(href='/bower_components/toastr/toastr.css', rel='stylesheet', type='text/css', media='all')
 block scripts
   script(src='/intl-phone/js/intlTelInput.min.js')
   script(src='/javascripts/phoneverify/phoneverify.js')
+  script(src='//www.authy.com/form.authy.min.js')
+  script(src='/bower_components/toastr/toastr.js')
 block content
   .main-container
     section.no-pad.login-page.fullscreen-element
@@ -20,12 +23,13 @@ block content
                 |
                 input#phoneNumber(name='phone_number', type='text', placeholder='Phone Number')
                 |
-                button.btn.btn-link(type='button') Send Code
+                button.btn.btn-link.btn_sendcode(type='button') Send Code
                 |
                 br
                 |
-                label Enter the access code
+                label.token_label Enter the access code
                 |
-                input(name='access_code', type='text', placeholder='Access code')
+                input.token(name='access_code', type='text', placeholder='Access code')
                 |
                 input.btn.btn-primary.btn-filled(type='submit', value='Submit')
+                input#userid(type='hidden', value=user._id)

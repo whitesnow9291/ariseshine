@@ -107,3 +107,16 @@ aside.mobileApps div.whiteFrame {
   content: " ";
   display: block;
   clear: both; }
+
+h1.chapter_title {
+  color: red;
+  text-indent: -30px;
+  margin: 20px auto; }
+
+h2.semi_chapter_title {
+  color: blue;
+  text-indent: -20px; }
+
+h3.section_title {
+  color: green;
+  text-indent: -10px; }

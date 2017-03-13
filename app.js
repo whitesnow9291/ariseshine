@@ -14,7 +14,7 @@ require('./config/passport')(passport); // pass passport for configuration
 var flash = require('connect-flash');
 var configDB = require('./config/database.js');
 var mongoose = require('mongoose');
-//mongoose.connect(configDB.url); // connect to our database
+mongoose.connect(configDB.url); // connect to our database
 
 var app = express();
 
@@ -25,9 +25,9 @@ app.set('view engine', 'pug');
 // uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
 
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 // Handle Express Sessions
 app.use(session({
     secret:'secret',
@@ -100,6 +100,9 @@ app.use('/internationalcall/call', call);
 app.use('/policiesprocedures', policiesprocedures);
 app.use('/myaccount/addfund/', addfund);
 
+app.use('/test', function(req, res, next){
+  res.render('test');
+});
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');

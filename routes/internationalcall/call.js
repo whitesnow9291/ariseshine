@@ -8,9 +8,13 @@ router.post('/connect', twilio.webhook({validate: false}), function(req, res, ne
   var phoneNumber = req.body.phoneNumber;
   var callerId = twilioconf.TWILIO_NUMBER;
   var twiml = new twilio.TwimlResponse();
-
+  var statusCallbackUrl = 'http://' + req.headers.host + '/internationalcall/call/statusCallback/';
   var numberDialer = function(dial) {
-      dial.number(phoneNumber);
+      dial.number(phoneNumber,{
+          statusCallbackEvent: 'initiated ringing answered completed',
+          statusCallback: statusCallbackUrl,
+          statusCallbackMethod: 'POST'
+      });
   };
 
   var clientDialer = function(dial) {
@@ -25,5 +29,9 @@ console.log(req.body);
 console.log(twiml+"_____________________________");
   res.send(twiml.toString());
 });
-
+router.post('/statusCallback',function(req,res,next){
+  var status = req.body.CallStatus;
+  console.log('--------------------------------------');
+  console.log(req.body);
+});
 module.exports = router;
