@@ -9,6 +9,13 @@
 .bg-primary {
   background-color: #8d4b20 !important; }
 
+.overlay-bar .login-button {
+  border: 2px solid #8d4b20;
+  color: #8d4b20; }
+
+.btn-primary:focus {
+  background: transparent; }
+
 .menu li a {
   font-size: 14px; }
 
@@ -47,3 +54,9 @@ footer.short-2 .contact-action:hover {
 
 .row.nav-menu ul.menu li a.active {
   text-decoration: underline; }
+
+.overlay-bar.nav-sticky .menu li a {
+  color: #8d4b20; }
+
+.overlay-bar.nav-sticky .menu li a {
+  color: #8d4b20; }

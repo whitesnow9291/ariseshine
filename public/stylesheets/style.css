@@ -16,6 +16,13 @@
   border: 2px solid #8d4b20;
   color: #8d4b20; }
 
+.overlay-bar .login-button {
+  border: 2px solid #8d4b20;
+  color: #8d4b20; }
+
+.btn-primary:focus {
+  background: transparent; }
+
 .btn:hover {
   background: none;
   color: #fff !important;
@@ -33,6 +40,9 @@
 
 .top-bar.nav-sticky {
   background: white; }
+
+.overlay-bar.nav-sticky .menu li a {
+  color: #8d4b20; }
 
 footer.short-2 .contact-action {
   background-color: #8d4b20; }

@@ -11,8 +11,10 @@ $ariseshine_maincolor: #8d4b20;
 }
 section:nth-of-type(odd){
   background: transparent !important;
-  margin:100px auto;
 }
 .accordion li.active .title{
+  background-color:$ariseshine_maincolor;
+}
+.accordion .title:hover{
   background-color:$ariseshine_maincolor;
 }

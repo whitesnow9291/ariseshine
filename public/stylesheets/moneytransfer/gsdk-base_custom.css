@@ -631,7 +631,7 @@ label {
   background-size: cover; }
 
 .wizard-container {
-  padding: 20px 0; }
+  padding: 20px 0 100px 0; }
 
 .wizard-card {
   min-height: 410px;

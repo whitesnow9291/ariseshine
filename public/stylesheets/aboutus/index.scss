@@ -11,6 +11,13 @@ $ariseshine_maincolor: #8d4b20;
     background-color: $ariseshine_maincolor !important;
 
 }
+.overlay-bar .login-button{
+  border: 2px solid $ariseshine_maincolor;
+  color:$ariseshine_maincolor;
+}
+.btn-primary:focus{
+  background: transparent;
+}
 .menu li a{
   font-size: 14px;
 }
@@ -52,4 +59,10 @@ footer.short-2 .contact-action:hover {
 }
 .row.nav-menu ul.menu li a.active{
   text-decoration: underline;
+}
+.overlay-bar.nav-sticky .menu li a{
+  color: $ariseshine_maincolor;
+}
+.overlay-bar.nav-sticky .menu li a{
+  color: $ariseshine_maincolor;
 }

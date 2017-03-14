@@ -9,8 +9,10 @@
   color: #8d4b20; }
 
 section:nth-of-type(odd) {
-  background: transparent !important;
-  margin: 100px auto; }
+  background: transparent !important; }
 
 .accordion li.active .title {
+  background-color: #8d4b20; }
+
+.accordion .title:hover {
   background-color: #8d4b20; }
