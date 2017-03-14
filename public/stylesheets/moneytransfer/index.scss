@@ -1,10 +1,19 @@
+
+$ariseshine_maincolor: #8d4b20;
 .top-bar {
   position: static;
-  background: teal; }
+}
   @media only screen and (max-width: 767px) and (min-width: 320px){
     .top-bar .menu li a {
         color: white;
     }
+  }
+  .overlay-bar .menu li a:hover{
+    color:#ef6e19;
+  }
+  .overlay-bar .login-button {
+      border-color: $ariseshine_maincolor;
+      color: $ariseshine_maincolor;
   }
   .step_course ul li{
     float: none !important;
@@ -16,4 +25,3 @@
 .tab-content{
   background:transparent !important;
 }
-font-weight: bold;

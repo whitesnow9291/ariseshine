@@ -7,8 +7,6 @@ $(function(){
   $('label.token_label').hide();
   $('input.token').hide();
   $('.btn_sendcode').click(function(){
-    $('label.token_label').show();
-    $('input.token').show();return;
     var id = $('#userid').val();
     var countryData = $("#phoneNumber").intlTelInput("getSelectedCountryData");
     var phoneNumber = $("#phoneNumber").val();
@@ -37,13 +35,30 @@ $(function(){
 
   })
   // Intercept form submission and submit the form with ajax
-  $('#contactForm').on('submit', function(e) {
-      // Prevent submit event from bubbling and automatically submitting the
-      // form
+  $('.btn_verifycode').click(function(){
+    if ($("input.token").is(":hidden")){
+      toastr.warning("Enter your phone number and send code");
+      return;
+    }
+    var token = $("input.token").val();
+    var id = $('#userid').val();
+    $.ajax({
+        url: '/auth/phoneverify',
+        type : 'POST',
+        dataType: 'json',
+        data: {
+            userid:id,
+            token:token
+        },
+        success:function(json){
+          if (json.success){
+           window.location.href = '/';
+          }else{
+            toastr.warning(json.msg);
+          }
 
-      e.preventDefault();
+        }
+    });
 
-      // Call our ajax endpoint on the server to initialize the phone call
-
-  });
+  })
 })

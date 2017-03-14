@@ -5,9 +5,67 @@ var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var User = require('../../models/user');
 
+var auth = require('../../config/auth');
+// Create authenticated Authy and Twilio API clients
+var authy = require('authy')(auth.AUTHY_API_KEY);
+
+var twilioconf = require('../../config/twilio/twilioconf');
+var twilioClient = require('twilio')(twilioconf.TWILIO_ACCOUNT_SID, twilioconf.TWILIO_AUTH_TOKEN);
+
 /* GET home page. */
 router.get('/login', function (req, res, next) {
     res.render('auth/login', {title: 'Login Page'});
+});
+
+router.post('/login', function(req,res){
+    var email = req.body.email;
+    var password = req.body.password;
+    req.checkBody('email', 'Email field is required').notEmpty();
+    req.checkBody('email', 'Email not valid').isEmail();
+    req.checkBody('password', 'Password field is required').notEmpty();
+
+    // Check for errors
+    var errors = req.validationErrors();
+
+    if (errors) {
+        console.log(errors);
+        res.render('auth/login', {
+            errors: JSON.stringify(errors),
+            email: email,
+            password: password
+        });
+    } else{
+    User.getUserByUserEmail(email, function(err, user){
+        if(err) throw err;
+        if(!user){
+            var errors = [{'msg':'Unregistered account.'}]
+            res.render('auth/login', {
+                errors: JSON.stringify(errors),
+                email: email,
+                password: password
+            });
+            return;
+        }
+        User.comparePassword(password, user.password, function(err, isMatch){
+            if(err) throw err;
+            if(isMatch){
+              if (user.verified == 'true') {
+                res.redirect('/');
+              }else{
+                res.render('auth/phoneverify', {title: 'phoneverify Page',user: user});
+              }
+            } else {
+              var errors = [{'msg':'Incorrect password.'}]
+              res.render('auth/login', {
+                  errors: JSON.stringify(errors),
+                  email: email,
+                  password: password
+              });
+              return;
+            }
+        });
+    });
+  }
 });
 router.get('/signup', function (req, res, next) {
     res.render('auth/signup', {title: 'Signup Page'});
@@ -18,7 +76,6 @@ router.get('/signup', function (req, res, next) {
 //   failureFlash : true // allow flash messages
 // }));
 router.post('/signup', function (req, res, next) {
-  return res.render('auth/phoneverify2', {title: 'Signup Page'});
     var fullname = req.body.fullname;
     var email = req.body.email;
     var password = req.body.password;
@@ -74,13 +131,8 @@ router.post('/signup', function (req, res, next) {
 router.get('/sendAuthyToken', function (req, res, next) {
   var id = req.query.userid;
   var phoneNumber = req.query.phoneNumber;
-  var countryCode = req.query.countryCode;
+  var countryCode = req.query.countryCode;console.log(phoneNumber);
   User.sendAuthyToken(id,phoneNumber,countryCode,function(err) {
-      console.log('---------------------------------------');
-      console.log(err);
-      console.log('---------------------------------------');
-
-
       if (err) {
           var errors={'result':false,'msg':'There was a problem sending your token - sorry :('};
           return  res.json(errors);
@@ -93,58 +145,84 @@ router.get('/sendAuthyToken', function (req, res, next) {
 
   })
 });
-// passport.serializeUser(function (user, done) {
-//     done(null, user.id);
-// });
-//
-// passport.deserializeUser(function (id, done) {
-//     User.getUserById(id, function (err, user) {
-//         done(err, user);
-//     });
-// });
-//
-// passport.use(new LocalStrategy(
-//     function (username, password, done) {
-//         User.getUserByUsername(username, function (err, user) {
-//             if (err) throw err;
-//             if (!user) {
-//                 console.log('Unknown User');
-//                 return done(null, false, {message: 'Unknown User'});
-//             }
-//
-//             User.comparePassword(password, user.password, function (err, isMatch) {
-//                 if (err) throw err;
-//                 if (isMatch) {
-//                     return done(null, user);
-//                 } else {
-//                     console.log('Invalid Password');
-//                     return done(null, false, {message: 'Invalid Password'});
-//                 }
-//             });
-//         });
-//     }
-// ));
-
-router.post('/login', passport.authenticate('local', {
-    failureRedirect: '/users/login',
-    failureFlash: 'Invalid username or password'
-}), function (req, res) {
-    console.log('Authentication Successful');
-    req.flash('success', 'You are logged in');
-    res.redirect('/');
-});
-
 router.get('/logout', function (req, res) {
     req.logout();
     req.flash('success', 'You have logged out');
     res.redirect('/users/login');
 });
 
-// router.post('/signup', function (req, res, next) {
-//     res.render('auth/phoneverify', {title: 'Phone Veryfy'});
-// });
 router.post('/phoneverify', function (req, res, next) {
-    res.render('auth/verifysuccess', {title: 'Phone Verify Success'});
+  var user;
+  var userid = req.body.userid;
+  var token = req.body.token;
+  console.log(token+"_______token________________")
+  // Load user model
+  User.findById(userid, function(err, doc) {
+      if (err || !doc) {
+          var errors={'result':false,'msg':'User not found for this ID.'};
+          return  res.json(errors);
+      }
+      console.log('user_exist_______________________');
+      // If we find the user, let's validate the token they entered
+      user = doc;
+      authy.verify(user.authyId, token, function(err, response) {
+          console.log('verify_complete by authy__________________________');
+          console.log(err+"err");
+          postVerify(err);
+      });
+  });
+
+  // Handle verification response
+  function postVerify(err) {
+      console.log(err+"err of verification_________________");
+      if (err) {
+          var errors={'result':false,'msg':'The token you entered was invalid - please retry.'};
+          return  res.json(errors);
+      }
+      console.log('verified_ok________________________');
+      // If the token was valid, flip the bit to validate the user account
+      user.verified = true;
+      if (!user.balance) {
+        user.balance = 1;
+      }
+      user.save(postSave);
+  }
+
+  // after we save the user, handle sending a confirmation
+  function postSave(err) {
+      if (err) {
+          var errors={'result':false,'msg':'There was a problem validating your account '
+              + '- please enter your token again.'};
+          return  res.json(errors);
+      }
+      console.log('save verification ok_________________________');
+      // Send confirmation text message
+      var message = 'You did it! Signup complete :)';
+      var tophone = user.phone.replace(/\s/g,'');
+
+      twilioClient.sendMessage({
+          to: tophone,
+          from: twilioconf.TWILIO_NUMBER,
+          body: message
+      }, function(err, response) {
+        var error = "You did it! Signup complete :)";
+        var result = true;
+        if (err) {
+          error='You are signed up, but '
+              + 'we could not send you a message. Our bad :(';
+          result = false;
+        }
+        console.log('send message ok______________________________');
+        return res.json({result:result,msg:error});
+      });
+  }
+
+  // respond with an error
+  function die(message) {
+      req.flash('errors', message);
+      response.redirect('/users/'+req.body.id+'/verify');
+  }
+
 });
 
 module.exports = router;

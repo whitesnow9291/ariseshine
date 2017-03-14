@@ -4,7 +4,7 @@ var auth = require('../config/auth');
 
 // Create authenticated Authy and Twilio API clients
 var authy = require('authy')(auth.AUTHY_API_KEY);
-// var twilioClient = require('twilio')(config.accountSid, config.authToken);
+
 var db = mongoose.connection;
 
 // User Schema
@@ -71,8 +71,8 @@ module.exports.getUserById = function(id, callback){
     User.findById(id, callback);
 }
 
-module.exports.getUserByUsername = function(username, callback){
-    var query = {username: username};
+module.exports.getUserByUserEmail = function(email, callback){
+    var query = {email: email};
     User.findOne(query, callback);
 }
 
@@ -117,6 +117,8 @@ module.exports.sendAuthyToken = function(userid,phoneNumber,countryCode,cb) {
               function(err, response) {
               if (err || !response.user) return cb.call(user, err);
               user.authyId = response.user.id;
+              user.phone = phoneNumber;
+              user.countryCode = countryCode;
               user.save(function(err, doc) {
                   if (err || !doc) return cb.call(this, err);
                   user = doc;
@@ -125,7 +127,13 @@ module.exports.sendAuthyToken = function(userid,phoneNumber,countryCode,cb) {
           });
       } else {
           // Otherwise send token to a known user
-          sendToken();
+          user.phone = phoneNumber;
+          user.countryCode = countryCode;
+          user.save(function(err, doc) {
+              if (err || !doc) return cb.call(this, err);
+              user = doc;
+              sendToken();
+          });
       }
 
       // With a valid Authy ID, send the 2FA token for this user

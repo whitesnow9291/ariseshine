@@ -1,3 +1,42 @@
+.overlay-bar .menu li a, .overlay-bar .has-dropdown:after, .overlay-bar .utility-menu span {
+  color: #8d4b20; }
+
+.btn-primary.btn-filled {
+  background: #8d4b20;
+  color: white;
+  border: 2px solid #8d4b20; }
+
+.bg-primary {
+  background-color: #8d4b20 !important; }
+
+.menu li a {
+  font-size: 14px; }
+
+.btn-primary {
+  border: 2px solid #8d4b20;
+  color: #8d4b20; }
+
+.btn:hover {
+  background: none;
+  color: #fff;
+  border-color: #8d4b20;
+  background-color: #8d4b20; }
+
+.subnav {
+  background: #8d4b20; }
+
+.overlay-bar .subnav li a {
+  color: white !important; }
+
+footer.short-2 .contact-action {
+  background-color: #8d4b20; }
+
+footer.short-2 .contact-action:hover {
+  background: #613417; }
+
+.top-bar.nav-sticky {
+  background: white; }
+
 .logo.logo-square {
   max-width: 150px;
   max-height: 150px;

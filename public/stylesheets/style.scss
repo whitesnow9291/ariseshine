@@ -1,3 +1,70 @@
+$ariseshine_maincolor: #8d4b20;
+.overlay-bar .menu li a,.overlay-bar .has-dropdown:after,.overlay-bar .utility-menu span{
+  color: $ariseshine_maincolor;
+}
+.menu li a{
+  font-size: 14px;
+}
+.btn-primary.btn-filled{
+  background: $ariseshine_maincolor;
+  color: white;
+  border: 2px solid $ariseshine_maincolor;
+}
+.bg-primary {
+    background-color: $ariseshine_maincolor !important;
+
+}
+.btn-primary{
+  border: 2px solid $ariseshine_maincolor;
+  color:$ariseshine_maincolor;
+}
+.btn:hover {
+    background: none;
+    color: #fff !important;
+    border-color: $ariseshine_maincolor;
+    background-color: $ariseshine_maincolor;
+}
+.subnav {
+  background: $ariseshine_maincolor;
+}
+.overlay-bar .subnav li a{
+  color: white !important;
+}
+.feature i{
+  color:$ariseshine_maincolor !important;
+}
+.top-bar.nav-sticky{
+  background: white;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+footer.short-2 .contact-action{
+  background-color: $ariseshine_maincolor;
+}
+footer.short-2 .contact-action:hover {
+    background: rgb(97, 52, 23);
+}
+.btn:hover{
+  background-color: $ariseshine_maincolor;
+}
+.btn-white:hover {
+    background: $ariseshine_maincolor;
+    color: #ffffff;
+}
 .logo.logo-square {
   max-width: 150px;
   max-height: 150px;
