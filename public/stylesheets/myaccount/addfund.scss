@@ -2,9 +2,6 @@ $ariseshine_maincolor: #b5651d;
 .top-bar {
   position: static;}
   @media only screen and (max-width: 767px) and (min-width: 320px){
-    .top-bar .menu li a {
-        color: white;
-    }
   }
   .overlay-bar .menu li a:hover{
     color:#ef6e19;
