@@ -182,9 +182,6 @@ router.post('/phoneverify', function (req, res, next) {
       console.log('verified_ok________________________');
       // If the token was valid, flip the bit to validate the user account
       user.verified = true;
-      if (!user.balance) {
-        user.balance = 1;
-      }
       user.save(postSave);
   }
 

@@ -1,4 +1,6 @@
 extends ../layout
+block styles
+  link(rel='stylesheet',href='/stylesheets/home/index.css')
 block content
   .main-container
     header.fullscreen-element.no-pad.centered-text
@@ -15,7 +17,7 @@ block content
                 | has arrived, build yours now.
               p.lead.text-white Tons of elements, Consistent style, Variant builder included.
               |
-            a.btn.btn-primary.btn-white(href='/moneytransfer') MoneyTransfer
+            a.btn.btn-primary.btn-filled(href='/moneytransfer') MoneyTransfer
             |
             a.btn.btn-primary.btn-filled(href='/internationalcall') InternationalCall
     section.text-banner

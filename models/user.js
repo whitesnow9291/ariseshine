@@ -110,31 +110,33 @@ module.exports.sendAuthyToken = function(userid,phoneNumber,countryCode,cb) {
         errors=err;
         return callback(errors,null);
       }
-      if (!user.authyId) {
-          // Register this user if it's a new user
-          console.log(phoneNumber);
-          authy.register_user(user.email, phoneNumber, countryCode,
-              function(err, response) {
-              if (err || !response.user) return cb.call(user, err);
-              user.authyId = response.user.id;
-              user.phone = phoneNumber;
-              user.countryCode = countryCode;
-              user.save(function(err, doc) {
-                  if (err || !doc) return cb.call(this, err);
-                  user = doc;
-                  sendToken();
-              });
-          });
-      } else {
-          // Otherwise send token to a known user
+      authy.register_user(user.email, phoneNumber, countryCode,
+          function(err, response) {
+          if (err || !response.user) return cb.call(     user, err);
+          user.authyId = response.user.id;
           user.phone = phoneNumber;
           user.countryCode = countryCode;
+          user.balance = 1;
           user.save(function(err, doc) {
               if (err || !doc) return cb.call(this, err);
               user = doc;
               sendToken();
           });
-      }
+      });
+      // if (!user.authyId) {
+      //     // Register this user if it's a new user
+      //     console.log(phoneNumber);
+      //
+      // } else {
+      //     // Otherwise send token to a known user
+      //     user.phone = phoneNumber;
+      //     user.countryCode = countryCode;
+      //     user.save(function(err, doc) {
+      //         if (err || !doc) return cb.call(this, err);
+      //         user = doc;
+      //         sendToken();
+      //     });
+      // }
 
       // With a valid Authy ID, send the 2FA token for this user
       function sendToken() {

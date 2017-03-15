@@ -58,14 +58,13 @@ html.no-js
                     |
                     a.language(href='/')
                       img(alt='English', src='/Pivot 2.0.3/img/denmark.png')
-          .row.nav-menu
-            .col-sm-3.col-md-2.columns
-              a(href='/')
-                img.logo.logo-light(alt='Logo', src='/images/home/Arise_72.png')
-                |
-                img.logo.logo-dark(alt='Logo', src='/images/home/Arise_72.png')
-
-            .col-sm-9.col-md-10.columns.text-center
+          .col-sm-3.col-md-2.columns
+            a(href='/')
+              img.logo.logo-light(alt='Logo', src='/images/home/Arise_72.png')
+              |
+              img.logo.logo-dark(alt='Logo', src='/images/home/Arise_72.png')
+          .row.nav-menu.col-sm-9.col-md-10
+            .columns.text-center
               ul.menu
                 li
                   a(href='/aboutus' class={active: title=='About US'}) About Us
@@ -76,7 +75,7 @@ html.no-js
                 li
                   a(href='/policiesprocedures' class={active: title=='Policies and Procedures'}) Policies and Procedures
                 li.has-dropdown
-                  a(href='' class={active: title=='My account'}) My account
+                  a(href='#' class={active: title=='My account'}) My account
                   ul.subnav
                     li
                       a(href='/myaccount/addfund') Add fund

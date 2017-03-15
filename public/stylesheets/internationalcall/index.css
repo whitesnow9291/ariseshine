@@ -5,14 +5,14 @@
   color: #ef6e19; }
 
 .overlay-bar .login-button {
-  border-color: #8d4b20;
-  color: #8d4b20; }
+  border-color: #b5651d;
+  color: #b5651d; }
 
 section:nth-of-type(odd) {
   background: transparent !important; }
 
 .accordion li.active .title {
-  background-color: #8d4b20; }
+  background-color: #b5651d; }
 
 .accordion .title:hover {
-  background-color: #8d4b20; }
+  background-color: #b5651d; }

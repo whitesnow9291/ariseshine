@@ -1,6 +1,30 @@
-$ariseshine_maincolor: #8d4b20;
+$ariseshine_maincolor: #b5651d;
 .overlay-bar .menu li a,.overlay-bar .has-dropdown:after,.overlay-bar .utility-menu span{
   color: $ariseshine_maincolor;
+}
+.top-bar .logo {
+  max-width: 150px;
+  max-height: 150px;
+  bottom: 20px;
+}
+.overlay:before{
+  background: transparent;
+}
+@media only screen and (max-width: 767px) and (min-width: 320px){
+  .overlay-bar {
+    background: white !important;
+  }
+  .top-bar .logo {
+    max-width: 100px;
+    max-height: 80px;
+    bottom: 0px !important;
+  }
+  .row.nav-menu ul.menu li {
+    margin-right: 0px !important;
+  }
+  nav .logo{
+    margin-bottom: 0px;
+  }
 }
 .btn-primary.btn-filled{
   background: $ariseshine_maincolor;
@@ -47,13 +71,6 @@ footer.short-2 .contact-action:hover {
   background: white;
 }
 
-
-
-.logo.logo-square {
-  max-width: 150px;
-  max-height: 150px;
-  bottom: 60px;
-}
 .row.nav-menu ul.menu li{
   margin-right: 30px;
 }

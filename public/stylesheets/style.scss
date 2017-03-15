@@ -1,4 +1,4 @@
-$ariseshine_maincolor: #8d4b20;
+$ariseshine_maincolor: #b5651d;
 .overlay-bar .menu li a,.overlay-bar .has-dropdown:after,.overlay-bar .utility-menu span{
   color: $ariseshine_maincolor;
 }
@@ -74,10 +74,33 @@ footer.short-2 .contact-action:hover {
     background: $ariseshine_maincolor;
     color: #ffffff;
 }
-.logo.logo-square {
+
+.top-bar .logo {
   max-width: 150px;
   max-height: 150px;
-  bottom: 60px;
+  bottom: 20px;
+}
+.has-dropdown:hover .subnav{
+  z-index: 10;
+}
+.btn{
+  margin: 5px !important;
+}
+@media only screen and (max-width: 767px) and (min-width: 320px){
+  .overlay-bar {
+    background: white !important;
+  }
+  .top-bar .logo {
+    max-width: 100px;
+    max-height: 80px;
+    bottom: 0px !important;
+  }
+  .row.nav-menu ul.menu li {
+    margin-right: 0px !important;
+  }
+  nav .logo{
+    margin-bottom: 0px;
+  }
 }
 .row.nav-menu ul.menu li{
   margin-right: 30px;
@@ -132,8 +155,6 @@ aside.mobileApps {
     background-position: 50%;
     background-repeat: no-repeat;
     background-size: cover;
-    height: 485px;
-    padding: 20px;
     position: relative;
     z-index: 1;
 }
@@ -172,6 +193,7 @@ aside.mobileApps p {
 aside.mobileApps div.whiteFrame {
     border: 2px solid #fff;
     height: 100%;
+    padding-bottom: 40px;
 }
 @media (min-width: 1440px){
 aside.mobileApps div.videoWrap video {

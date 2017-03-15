@@ -1,11 +1,6 @@
-$ariseshine_maincolor: #8d4b20;
-.home_content_right, .home_content_left {
-  height: 500px;
-  padding: 20px; }
-
-.home_content_right {
-  background-color: #fbbb81; }
-
-.home_content_left {
-  background-color: #b0ce84;
+$ariseshine_maincolor: #b5651d;
+@media only screen and (max-width: 767px) and (min-width: 320px){
+  a.btn.btn-primary{
+    width: 80%;
+  }
 }

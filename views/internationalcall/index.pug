@@ -17,9 +17,10 @@ block content
         .form-group
           input.form-control(type='text', id='phoneNumber',
             placeholder='(651) 555-7889')
-        button.call  Call
-        button.hangup  Hangup
-        #log Loading...
+        .form-group.clearfix
+          button.call.pull-left.col-sm-5  Call
+          button.hangup.pull-right.col-sm-5  Hangup
+        .form-group.clearfix#log Loading...
   
     section.accordion-section
       .container
