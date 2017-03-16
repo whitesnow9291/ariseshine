@@ -10,6 +10,15 @@ $ariseshine_maincolor: #b5651d;
 .overlay:before{
   background: transparent;
 }
+.overlay-bar {
+  background: white !important;
+}
+.overlay-bar .menu li a:hover{
+  color:#ef6e19;
+}
+.overlay-bar .utility-menu .utility-inner {
+    border-bottom: 1px solid $ariseshine_maincolor;
+}
 @media only screen and (max-width: 767px) and (min-width: 320px){
   .overlay-bar {
     background: white !important;

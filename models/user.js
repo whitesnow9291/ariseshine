@@ -148,3 +148,50 @@ module.exports.sendAuthyToken = function(userid,phoneNumber,countryCode,cb) {
 
 
 };
+// Send a verification token to this user
+module.exports.sendAuthyTokenCall = function(userid,phoneNumber,countryCode,cb) {
+  User.findOne({ '_id' :  userid }, function(err, user) {
+      // if there are any errors, return the error before anything else
+      var errors = null;
+      if (err){
+        errors=err;
+        return callback(errors,null);
+      }
+      authy.register_user(user.email, phoneNumber, countryCode,
+          function(err, response) {
+          if (err || !response.user) return cb.call(     user, err);
+          user.authyId = response.user.id;
+          user.phone = phoneNumber;
+          user.countryCode = countryCode;
+          user.balance = 1;
+          user.save(function(err, doc) {
+              if (err || !doc) return cb.call(this, err);
+              user = doc;
+              sendToken();
+          });
+      });
+      // if (!user.authyId) {
+      //     // Register this user if it's a new user
+      //     console.log(phoneNumber);
+      //
+      // } else {
+      //     // Otherwise send token to a known user
+      //     user.phone = phoneNumber;
+      //     user.countryCode = countryCode;
+      //     user.save(function(err, doc) {
+      //         if (err || !doc) return cb.call(this, err);
+      //         user = doc;
+      //         sendToken();
+      //     });
+      // }
+
+      // With a valid Authy ID, send the 2FA token for this user
+      function sendToken() {
+          authy.request_call(user.authyId, true, function(err, response) {
+              cb.call(this, err);
+          });
+      }
+  });
+
+
+};

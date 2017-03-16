@@ -68,9 +68,20 @@ footer.short-2 .contact-action:hover {
 .btn {
   margin: 5px !important; }
 
+.overlay-bar {
+  background: white !important; }
+
+.overlay-bar .menu li a:hover {
+  color: #ef6e19; }
+
+.overlay-bar .utility-menu .utility-inner {
+  border-bottom: 1px solid #b5651d; }
+
 @media only screen and (max-width: 767px) and (min-width: 320px) {
   .overlay-bar {
     background: white !important; }
+  .overlay-bar .menu li a:hover {
+    color: #ef6e19; }
   .top-bar .logo {
     max-width: 100px;
     max-height: 80px;

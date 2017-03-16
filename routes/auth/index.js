@@ -145,6 +145,23 @@ router.get('/sendAuthyToken', function (req, res, next) {
 
   })
 });
+router.get('/sendAuthyTokenCall', function (req, res, next) {
+  var id = req.query.userid;
+  var phoneNumber = req.query.phoneNumber;
+  var countryCode = req.query.countryCode;console.log(phoneNumber);
+  User.sendAuthyTokenCall(id,phoneNumber,countryCode,function(err) {
+      if (err) {
+          var errors={'result':false,'msg':'There was a problem sending your token - sorry :('};
+          return  res.json(errors);
+      }else{
+        var errors={'result':true,'msg':'We have just sent auth code to your phone successfully'};
+        return  res.json(errors);
+      }
+
+      // Send to token verification page
+
+  })
+});
 router.get('/logout', function (req, res) {
     req.logout();
     req.flash('success', 'You have logged out');
@@ -192,26 +209,30 @@ router.post('/phoneverify', function (req, res, next) {
               + '- please enter your token again.'};
           return  res.json(errors);
       }
-      console.log('save verification ok_________________________');
-      // Send confirmation text message
-      var message = 'You did it! Signup complete :)';
-      var tophone = user.phone.replace(/\s/g,'');
+      req.session.user = user._id;
 
-      twilioClient.sendMessage({
-          to: tophone,
-          from: twilioconf.TWILIO_NUMBER,
-          body: message
-      }, function(err, response) {
-        var error = "You did it! Signup complete :)";
-        var result = true;
-        if (err) {
-          error='You are signed up, but '
-              + 'we could not send you a message. Our bad :(';
-          result = false;
-        }
-        console.log('send message ok______________________________');
-        return res.json({result:result,msg:error});
-      });
+      console.log('save verification ok_________________________');
+      var errors={'result':true,'msg':'You did it! Signup complete :)'};
+      return  res.json(errors);
+      // Send confirmation text message
+      // var message = 'You did it! Signup complete :)';
+      // var tophone = user.phone.replace(/\s/g,'');
+      //
+      // twilioClient.sendMessage({
+      //     to: tophone,
+      //     from: twilioconf.TWILIO_NUMBER,
+      //     body: message
+      // }, function(err, response) {
+      //   var error = "You did it! Signup complete :)";
+      //   var result = true;
+      //   if (err) {
+      //     error='You are signed up, but '
+      //         + 'we could not send you a message. Our bad :(';
+      //     result = false;
+      //   }
+      //   console.log('send message ok______________________________');
+      //   return res.json({result:result,msg:error});
+      // });
   }
 
   // respond with an error
