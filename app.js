@@ -140,13 +140,8 @@ function isAuthenticated(req, res, next) {
     // if (req.session.user) {
     //     next();
     // } else {
-    //    res.redirect("/auth");
+    //    res.redirect("/auth/login");
     // }
-    // if (req.user.authenticated)
-    //     return next();
-    //
-    // // IF A USER ISN'T LOGGED IN, THEN REDIRECT THEM SOMEWHERE
-    // res.redirect('/');
 }
 
 
