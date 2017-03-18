@@ -1,5 +1,6 @@
 // Execute JavaScript on page load
 $(function() {
+  var callfee = 0;
   var callStatus = $("#call-status");
   var answerButton = $(".answer-button");
   var callSupportButton = $(".call-support-button");
@@ -14,7 +15,7 @@ $(function() {
 
     $.post("/internationalcall/token/generate", {page: window.location.pathname}, function(data) {
       // Set up the Twilio Client Device with the token
-      Twilio.Device.setup(data.token);
+      Twilio.Device.setup(data.token,{ debug: true, closeProtection: true });
     });
 
     /* Callback to let us know Twilio Client is ready */
@@ -46,8 +47,8 @@ $(function() {
       hangUpButton.prop("disabled", true);
       callCustomerButtons.prop("disabled", false);
       callSupportButton.prop("disabled", false);
-
       updateCallStatus("Ready");
+      LogCallTrack(conn.parameters.CallSid);
     });
     function callCustomer(phoneNumber) {
       updateCallStatus("Calling " + phoneNumber + "...");
@@ -60,8 +61,39 @@ $(function() {
     }
     // Intercept form submission and submit the form with ajax
     $('button.call').click(function(){
-      callCustomer($('#phoneNumber').val());
+      var phoneNumber = $('#phoneNumber').val();
+      callCustomer(phoneNumber);
+      // $.post("/internationalcall/getfee", {'phoneNumber': phoneNumber}, function(data) {
+      //   // Set up the Twilio Client Device with the token
+      //   console.log(data);
+      //   if (data.number){
+      //       callfee = data.number.outboundCallPrice.currentPrice;
+      //       callCustomer(phoneNumber);
+      //   }else{
+      //     toast.error("Can't get fee of the phone number.Please input number correctly");
+      //   }
+      //
+      // });
+
     })
+    function LogCallTrack(callsid){
+
+      $.post("/internationalcall/getCallTrackbyParentCallid", {'parentcallsid': callsid}, function(data) {
+        // Set up the Twilio Client Device with the token
+        console.log(data);
+        if (data){
+            var duration = data.call.duration;
+            var price = data.call.price;
+            var amount = data.amount;
+            $("span.user_amount.value").html(amount);
+            toastr.info('Call Price: '+price);
+            toastr.info('Call Duration: '+duration);
+        }else{
+          toastr.error("Twilio Connection error!");
+        }
+
+      });
+    }
     $('button.hangup').click(function(){
       hangUp();
     })

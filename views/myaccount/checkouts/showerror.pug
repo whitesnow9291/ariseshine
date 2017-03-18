@@ -4,20 +4,15 @@ block styles
 block content
   h1
   .col-sm-6
-    if result && result.message
       .text-center.text-success(style='font-size: 11em;')
-        i.glyphicon.glyphicon-ok-circle
+        i.glyphicon.glyphicon-remove-circle
 
-      h1.text-center=result.header
+      h1.text-center Database save error!
       .row.text-center
-        p= result.message
-    else
-      .row.text-center
-        p Test another transaction or see the Braintree API response.
-
+        p= Transaction successed but unfortunetely error occured saving database.
     .row.text-center
-      a.button.primary.back(href="/myaccount/addfund/")
-        span Test Another Transaction
+      a.button.primary.back(href="/auth/aboutus/")
+        span Resolve it
 
   .col-sm-6
     h5 Transaction

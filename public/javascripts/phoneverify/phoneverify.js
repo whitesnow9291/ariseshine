@@ -79,7 +79,7 @@ $(function(){
             token:token
         },
         success:function(json){
-          if (json.success){
+          if (json.result){
            window.location.href = '/';
           }else{
             toastr.warning(json.msg);

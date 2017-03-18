@@ -1,8 +1,8 @@
 
 var express = require('express');
 var router = express.Router();
-var passport = require('passport');
-var LocalStrategy = require('passport-local').Strategy;
+// var passport = require('passport');
+// var LocalStrategy = require('passport-local').Strategy;
 var User = require('../../models/user');
 
 var auth = require('../../config/auth');
@@ -50,9 +50,10 @@ router.post('/login', function(req,res){
             if(err) throw err;
             if(isMatch){
               if (user.verified == 'true') {
+                req.session.user = {'id':user._id,'amount':user.amount};
                 res.redirect('/');
               }else{
-                res.render('auth/phoneverify', {title: 'phoneverify Page',user: user});
+                res.render('auth/phoneverify', {title: 'phoneverify Page',usertoverify: user});
               }
             } else {
               var errors = [{'msg':'Incorrect password.'}]
@@ -123,7 +124,7 @@ router.post('/signup', function (req, res, next) {
               console.log('----------------------createUser-------------------------');
               console.log(user);
               console.log('----------------------createUser end---------------------');
-              res.render('auth/phoneverify', {title: 'Signup Page',user: user});
+              res.render('auth/phoneverify', {title: 'Signup Page',usertoverify: user});
             }
         });
     }
@@ -162,10 +163,9 @@ router.get('/sendAuthyTokenCall', function (req, res, next) {
 
   })
 });
-router.get('/logout', function (req, res) {
-    req.logout();
-    req.flash('success', 'You have logged out');
-    res.redirect('/users/login');
+router.get('/signout', function (req, res) {
+    delete req.session.user;
+    res.redirect('/');
 });
 
 router.post('/phoneverify', function (req, res, next) {

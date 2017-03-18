@@ -14,7 +14,7 @@ require('./config/passport')(passport); // pass passport for configuration
 var flash = require('connect-flash');
 var configDB = require('./config/database.js');
 var mongoose = require('mongoose');
-//mongoose.connect(configDB.url); // connect to our database
+mongoose.connect(configDB.url); // connect to our database
 
 var app = express();
 
@@ -78,28 +78,29 @@ var home = require('./routes/home/index');
 var aboutus = require('./routes/aboutus/index');
 var moneytransfer = require('./routes/moneytransfer/index');
 
-var internationalcall = require('./routes/internationalcall/index');
 var token = require('./routes/internationalcall/token');
-var call = require('./routes/internationalcall/call');
+var internationalcall = require('./routes/internationalcall/call');
 
 var policiesprocedures = require('./routes/policiesprocedures/index');
 var myaccount = require('./routes/myaccount/index');
 var users = require('./routes/users');
 var addfund = require('./routes/myaccount/addfund/index');
-
+app.use(function(req,res,next){
+    res.locals.user = req.session.user;
+    next();
+});
 app.use('/', home);
 app.use('/auth', auth);
 app.use('/aboutus', aboutus);
 app.use('/users', users);
 app.use('/moneytransfer',isAuthenticated, moneytransfer);
 
-app.use('/internationalcall',isAuthenticated, internationalcall);
-app.use('/internationalcall/token',isAuthenticated, token);
-app.use('/internationalcall/call',isAuthenticated, call);
+app.use('/internationalcall/', internationalcall);
+app.use('/internationalcall/token', token);
 
 app.use('/policiesprocedures', policiesprocedures);
 app.use('/myaccount/addfund/',isAuthenticated, addfund);
-
+app.use('/myaccount/',isAuthenticated, myaccount);
 app.use('/test', function(req, res, next){
   res.render('test');
 });
@@ -136,12 +137,12 @@ function isAuthenticated(req, res, next) {
 
     // CHECK THE USER STORED IN SESSION FOR A CUSTOM VARIABLE
     // you can do this however you want with whatever variables you set up
-    next();
-    // if (req.session.user) {
-    //     next();
-    // } else {
-    //    res.redirect("/auth/login");
-    // }
+    //next();
+    if (req.session.user) {
+        next();
+    } else {
+       res.redirect("/auth/login");
+    }
 }
 
 

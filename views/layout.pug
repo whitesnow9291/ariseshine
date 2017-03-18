@@ -48,9 +48,15 @@ html.no-js
                   i.icon.icon_mail
                   |  hello@ariseshine.net
                 .pull-right
-                  a.btn.btn-primary.login-button.btn-xs(href='/auth/login') Login
-                  |
-                  a.btn.btn-primary.btn-filled.btn-xs(href='/auth/signup') Signup
+                  if !locals.user
+                    a.btn.btn-primary.login-button.btn-xs(href='/auth/login') Login
+                    |
+                    a.btn.btn-primary.btn-filled.btn-xs(href='/auth/signup') Signup
+                  else
+                    span.user_amount.
+                      User Amount:&nbsp; 
+                    span.user_amount.value #{locals.user.amount} 
+                    span.user_amount &nbsp;$
                   //
                     |
                     a.language(href='/')
@@ -77,14 +83,21 @@ html.no-js
                 li.has-dropdown
                   a(href='#' class={active: title=='My account'}) My account
                   ul.subnav
-                    li
-                      a(href='/myaccount/addfund') Add fund
-                    li
-                      a(href='/myaccount/addfund') LogIn
-                    li
-                      a(href='/') SignUp
-                    li
-                      a(href='/') Sign out
+                    if locals.user
+                      li
+                        a(href='/myaccount/setting') Setting
+                      li
+                        a(href='/myaccount/phoneverify') Phone verify
+                      li
+                        a(href='/myaccount/addfund') Add fund
+                      li
+                        a(href='/auth/signout') Sign out
+                    else
+                      li
+                        a(href='/auth/login') LogIn
+                      li
+                        a(href='/auth/signup') SignUp
+                    
           .mobile-toggle
             i.icon.icon_menu
     block content

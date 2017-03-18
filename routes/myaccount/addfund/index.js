@@ -4,6 +4,7 @@ var express = require('express');
 var braintree = require('braintree');
 var router = express.Router(); // eslint-disable-line new-cap
 var gateway = require('../../../config/braintree/gateway');
+var User = require('../../../models/user');
 
 var TRANSACTION_SUCCESS_STATUSES = [
   braintree.Transaction.Status.Authorizing,
@@ -63,8 +64,26 @@ router.get('/checkouts/:id', function (req, res) {
 
   gateway.transaction.find(transactionId, function (err, transaction) {
     result = createResultObject(transaction);
-    console.log('ok--------------------');
-    res.render('myaccount/checkouts/show', {transaction: transaction, result: result});
+    User.findById(req.session.user.id, function(err, doc) {
+        if (err || !doc) {
+            var errors={'result':false,'msg':'User not found for this ID.'};
+            return  res.json(errors);
+        }
+        console.log('user_exist_______________________');
+        // If we find the user, let's validate the token they entered
+        var user = doc;
+        user.amount = parseFloat(user.amount)+parseFloat(transaction.amount);
+        req.session.user.amount = user.amount;
+        user.save(function(err,doc){
+          if (err){
+            res.render('myaccount/checkouts/showerror', {transaction: transaction});
+          }else{
+            console.log('ok--------------------');
+            res.render('myaccount/checkouts/show', {transaction: transaction, result: result});
+          }
+        });
+    });
+
   });
 });
 

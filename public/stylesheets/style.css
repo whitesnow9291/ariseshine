@@ -16,6 +16,11 @@
   border: 2px solid #b5651d;
   color: #b5651d; }
 
+span.user_amount {
+  color: #b5651d;
+  font-size: 18px;
+  font-weight: bold; }
+
 .overlay-bar .login-button {
   border: 2px solid #b5651d;
   color: #b5651d; }

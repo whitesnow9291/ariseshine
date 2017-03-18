@@ -42,7 +42,7 @@ var UserSchema = mongoose.Schema({
     deviceToken: {
         type: String
     },
-    balance: {
+    amount: {
         type: String
     },
 
@@ -92,13 +92,70 @@ module.exports.createUser = function(newUser,callback){
 
               // Set Hashed password
               newUser.password = hash;
-
+              newUser.amount = 1;
               // Create User
               newUser.save(callback);
           });
           return;
         }
         callback(errors,null);
+    });
+};
+module.exports.updateUser = function(newUser,callback){
+    User.findOne({ 'email' :  newUser.email }, function(err, user) {
+        // if there are any errors, return the error before anything else
+        var errors = null;
+        if (err){
+          errors=err;
+        }
+        if (user){
+          if (user._id!=newUser.id){
+            errors='same email already exist!';
+            console.log(errors+"_________________________update user");
+            return callback(errors,null);
+          }else{
+            User.comparePassword(newUser.oldpassword, user.password, function(err, isMatch){
+                if(err) throw err;
+                if(isMatch){
+                  bcrypt.hash(newUser.password, 10, function(err, hash){
+                      if(err) throw err;
+                      console.log(hash+"_________________________update user hash created");
+                      // Set Hashed password
+                      user.password = hash;
+                      user.email = newUser.email;
+                      user.fullname = newUser.fullname;
+                      // Create User
+                      user.save(callback);
+                  });
+                } else {
+                  errors='incorrect password!';
+                  return callback(errors,null);
+                }
+            });
+          }
+        }else{
+          User.findOne({ '_id' :  newUser.id }, function(err, userbyid) {
+            User.comparePassword(newUser.oldpassword, userbyid.password, function(err, isMatch){
+                if(err) throw err;
+                if(isMatch){
+                  bcrypt.hash(newUser.password, 10, function(err, hash){
+                      if(err) throw err;
+                      console.log(hash+"_________________________update user hash created");
+                      // Set Hashed password
+                      userbyid.password = hash;
+                      userbyid.email = newUser.email;
+                      userbyid.fullname = newUser.fullname;
+                      // Create User
+                      userbyid.save(callback);
+                  });
+                } else {
+                  errors='incorrect password!';
+                  return callback(errors,null);
+                }
+            });
+          });
+        }
+
     });
 };
 // Send a verification token to this user
@@ -116,7 +173,6 @@ module.exports.sendAuthyToken = function(userid,phoneNumber,countryCode,cb) {
           user.authyId = response.user.id;
           user.phone = phoneNumber;
           user.countryCode = countryCode;
-          user.balance = 1;
           user.save(function(err, doc) {
               if (err || !doc) return cb.call(this, err);
               user = doc;
@@ -163,7 +219,6 @@ module.exports.sendAuthyTokenCall = function(userid,phoneNumber,countryCode,cb) 
           user.authyId = response.user.id;
           user.phone = phoneNumber;
           user.countryCode = countryCode;
-          user.balance = 1;
           user.save(function(err, doc) {
               if (err || !doc) return cb.call(this, err);
               user = doc;
