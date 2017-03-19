@@ -87,6 +87,8 @@ $(function() {
             var amount = data.amount;
             $("span.user_amount.value").html(amount);
             toastr.info('Call Price: '+price);
+            if (duration==null)
+            duration = 0;
             toastr.info('Call Duration: '+duration);
         }else{
           toastr.error("Twilio Connection error!");

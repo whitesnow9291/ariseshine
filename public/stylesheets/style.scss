@@ -17,9 +17,17 @@ $ariseshine_maincolor: #b5651d;
   border: 2px solid $ariseshine_maincolor;
   color:$ariseshine_maincolor;
 }
+.top-bar{
+  position: relative !important;
+}
 span.user_amount{
   color: #b5651d;
   font-size: 18px;
+  font-weight: bold;
+}
+span.user_amount.value{
+  color: orangered;
+  font-size: 2em;
   font-weight: bold;
 }
 .overlay-bar .login-button{

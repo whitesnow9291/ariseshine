@@ -16,9 +16,17 @@
   border: 2px solid #b5651d;
   color: #b5651d; }
 
+.top-bar {
+  position: relative !important; }
+
 span.user_amount {
   color: #b5651d;
   font-size: 18px;
+  font-weight: bold; }
+
+span.user_amount.value {
+  color: orangered;
+  font-size: 2em;
   font-weight: bold; }
 
 .overlay-bar .login-button {

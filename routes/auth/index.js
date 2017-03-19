@@ -209,8 +209,7 @@ router.post('/phoneverify', function (req, res, next) {
               + '- please enter your token again.'};
           return  res.json(errors);
       }
-      req.session.user = user._id;
-
+      req.session.user = {'id':user._id,'amount':user.amount};
       console.log('save verification ok_________________________');
       var errors={'result':true,'msg':'You did it! Signup complete :)'};
       return  res.json(errors);
