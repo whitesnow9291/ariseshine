@@ -1,3 +1,20 @@
 section.no-pad.login-page.fullscreen-element .container.align-vertical{
   padding-top: 30px !important;
 }
+section.no-pad.login-page.fullscreen-element{
+  height: inherit !important;
+}
+input[type=date]{
+  line-height: inherit;
+}
+select.form-control{
+  border: none;
+  box-shadow: none;
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 50px;
+  padding: 14px 24px 14px 24px;
+  width: 100%;
+  margin-bottom: 30px;
+  height: auto;
+}

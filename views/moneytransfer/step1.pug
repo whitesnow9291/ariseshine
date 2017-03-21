@@ -1,10 +1,9 @@
-//
-  form(action='https://my-server.com', method='POST')
-    script.hw-form-transfer-methods(src='https://api.sandbox.hyperwallet.com/rest/widgets/transfer-methods/usr-ab6cda2c-f2e3-4d1f-99f3-385c5d12cacd/en.min.js', data-hw-template='bootstrap3', data-hw-skipprofilefields='true', data-hw-transfermethodconfiguration='{"profileType": "INDIVIDUAL"}')
+
 #widget
-script(src='https://api.sandbox.hyperwallet.com/rest/widgets/transfer-methods/usr-ab6cda2c-f2e3-4d1f-99f3-385c5d12cacd/en.min.js')
+script(src='https://api.sandbox.hyperwallet.com/rest/widgets/transfer-methods/'+hyperusertoken+'/en.min.js')
 script(type='text/javascript').
   //create widget
+  var hyperwallet_moneytransfer_response = null;
   var widget = HWWidgets.transferMethods.configure({
   "template": "bootstrap3",
   "el": document.getElementById("widget"),
@@ -12,12 +11,12 @@ script(type='text/javascript').
   "skipProfileFields":true,
   "onComplete": function (data) {
     console.log("Received token: " + data.token);
+    hyperwallet_moneytransfer_response = data;
     this.setData({});
     step_widzard.bootstrapWizard('next');
   },
   "onError": function (errors, state) {
     console.log(errors);
-    step_widzard.bootstrapWizard('next')
   }
   });
   widget.create(); //display widget

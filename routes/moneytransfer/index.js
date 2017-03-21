@@ -3,7 +3,8 @@ var express = require('express');
 var router = express.Router();
 var braintree = require('braintree');
 var gateway = require('../../config/braintree/gateway');
-
+var User = require('../../models/user');
+var hyperwalletconf = require('../../config/hyperwalletconf');
 var TRANSACTION_SUCCESS_STATUSES = [
   braintree.Transaction.Status.Authorizing,
   braintree.Transaction.Status.Authorized,
@@ -52,9 +53,21 @@ router.get('/', function(req, res, next) {
     res.render('moneytransfer/index', { title: 'Money Transfer' });
 });
 router.get('/moneytransfer', function(req, res, next) {
-  gateway.clientToken.generate({}, function (err, response) {
-    res.render('moneytransfer/moneytransfer', {clientToken: response.clientToken, messages: req.flash('error')});
+  User.findById(req.session.user.id, function(err, doc) {
+      if (err || !doc) {
+          var errors={'result':false,'msg':'User not found for this ID.'};
+          return  res.json(errors);
+      }
+      // If we find the user, let's validate the token they entered
+      var user = doc;
+      gateway.clientToken.generate({}, function (err, response) {
+        res.render('moneytransfer/moneytransfer', {clientToken: response.clientToken, messages: req.flash('error'),
+                                                    hyperusertoken:user.hyperusertoken,
+                                                    hyperprogramtoken:hyperwalletconf.programToken,
+                                                    hyperun: hyperwalletconf.username, hyperpa: hyperwalletconf.password});
+      });
   });
+
 });
 router.post('/post_moneytransfer', function (req, res) {//4111111111111111
   var transactionErrors;
@@ -76,5 +89,29 @@ router.post('/post_moneytransfer', function (req, res) {//4111111111111111
     }
   });
 });
-
+router.post('/post_hyper_pay', function (req, res) {//4111111111111111
+  var hyperwallet_moneytransfer_response = req.body.hyperwallet_moneytransfer_response;
+  var amount = req.body.amount;
+  console.log(hyperwallet_moneytransfer_response);
+  var Hyperwallet = require('hyperwallet-sdk');
+  var client = new Hyperwallet({ username: hyperwalletconf.username, password: hyperwalletconf.password,
+  programToken: hyperwalletconf.programToken });
+  console.log(client+"-------------------------------------------hyperwallet client");
+  client.createPayment({
+    "clientPaymentId": Math.random().toString(36).substring(7),
+    "amount": amount,
+    "currency": hyperwallet_moneytransfer_response.transferMethodCurrency,
+    "purpose": "OTHER",
+    "destinationToken": hyperwallet_moneytransfer_response.token
+  }, function(error, body) {
+    // handle response body here
+    console.log(error+"__________________createpayment error __________________");
+    console.log(body+"__________________createpayment body__________________");
+    if (error){
+      return res.json({'result':'error',msg:error});
+    }else{
+      return res.json({'result':'success',msg:'successfully transfered'});
+    }
+  });
+});
 module.exports = router;

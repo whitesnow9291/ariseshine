@@ -1,0 +1,11 @@
+label.labelforselect {
+  color: #b5651d;
+  padding: 10px;
+  background: white;
+  border-radius: 25px;
+  float: left;
+  clear: both;
+  width: 40%; }
+
+select#country.bfh-countries, select#states1.bfh-states {
+  width: 50% !important; }

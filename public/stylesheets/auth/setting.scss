@@ -1,0 +1,13 @@
+$ariseshine_maincolor: #b5651d;
+label.labelforselect{
+      color: $ariseshine_maincolor;
+      padding: 10px;
+      background: white;
+      border-radius: 25px;
+      float: left;
+      clear: both;
+      width: 40%;
+}
+select#country.bfh-countries, select#states1.bfh-states{
+  width:50% !important;
+}

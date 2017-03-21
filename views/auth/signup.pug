@@ -2,34 +2,50 @@ extends ../layout
 block styles
   link(href='/stylesheets/auth/signup.css', rel='stylesheet', type='text/css', media='all')
   link(href='/bower_components/toastr/toastr.css', rel='stylesheet', type='text/css', media='all')
+  link(href="/bootstrapformhelpers/bootstrap-formhelpers.min.css", rel='stylesheet', type='text/css', media='all')
 block content
   .main-container
     section.no-pad.login-page.fullscreen-element
       .background-image-holder
         img.background-image(alt='Poster Image For Mobiles', src='/Pivot 2.0.3/img/hero6.jpg')
       .container.align-vertical
-        .row
-          .col-md-4.col-md-offset-4.col-sm-6.col-sm-offset-3.text-center
-            h1.text-white Create account
-            .photo-form-wrapper.clearfix
-              form(method='post',action='/auth/signup',enctype='application/x-www-form-urlencoded')
-                input(name='fullname', type='text', placeholder='Enter Name' value=fullname?fullname:'')
-                |
-                input(name='email', type='email', placeholder='Enter Email' value=email?email:'')
-                |
-                input(name='password', type='password', placeholder='Enter Password' value=password?password:'')
-                |
-                input(name='password2', type='password', placeholder='Confirm Password' value=password2?password2:'')
-                |
-                input.btn.btn-primary.btn-filled(type='submit', value='Create')
+        h1.text-white.text-center Create account
+        form(method='post',action='/auth/signup',enctype='application/x-www-form-urlencoded')
+          .photo-form-wrapper.clearfix.col-md-6
+            input(name='firstName', type='text', placeholder='First Name' value=firstName?firstName:'')
+            |
+            input(name='lastName', type='text', placeholder='Last Name' value=lastName?lastName:'')
+            |
+            input(name='dateOfBirth', type='date', placeholder='Birthday' value=dateOfBirth?dateOfBirth:'')
+            |
+            input(name='addressLine1', type='text', placeholder='Address Line1' value=addressLine1?addressLine1:'')
+            |
+            input(name='city', type='text', placeholder='City' value=city?city:'')
+            |
+            select#country.form-control.bfh-countries(data-country='US',name='country')
+          .photo-form-wrapper.clearfix.col-md-6
+            select#states1.bfh-states.form-control(name='stateProvince',data-country="country")
+            |
+            input(name='postalCode', type='text', placeholder='PostalCode' value=postalCode?postalCode:'')
+            |
+            input(name='email', type='email', placeholder='Enter Email' value=email?email:'')
+            |
+            input(name='password', type='password', placeholder='Enter Password' value=password?password:'')
+            |
+            input(name='password2', type='password', placeholder='Confirm Password' value=password2?password2:'')
+            |
+            input.btn.btn-primary.btn-filled.pull-right(type='submit', value='Create')
+        .clearfix
 block scripts
   script(src='/bower_components/toastr/toastr.js')
+  script(src='/bootstrapformhelpers/bootstrap-formhelpers.min.js')
+  script(src='/javascripts/auth/signup.js')
   script(type='text/javascript').
     var errors = '!{errors}';
-
     if (errors){
       errors = JSON.parse(errors);
       for (var i=0;i<errors.length;i++) {
         toastr.warning(errors[i].msg);
       }
     }
+    

@@ -22,33 +22,66 @@ var db = mongoose.connection;
 //     "authyId" : "28867505"
 // }
 var UserSchema = mongoose.Schema({
-    fullname: {
+
+    //hyperwallet params
+    clientUserId: {
+      type: String
+    },
+    hyperusertoken: {
+      type: String
+    },
+    hyperuserstatus: {
+      type: String
+    },
+    hyperusercreatedon: {
+
+    },
+    firstName: {
+        type: String,
+    },
+    lastName: {
         type: String,
     },
     email: {
         type: String
     },
+    dateOfBirth: {
+      type: String
+    },
+    country: {
+      type: String
+    },
+    stateProvince: {
+      type: String
+    },
+    addressLine1: {
+      type: String
+    },
+    city: {
+      type: String
+    },
+    postalCode: {
+      type: String
+    },
+
+    //authenticate
+    password: {
+        type: String,
+        required: true,
+        bcrypt: true
+    },
+    // phoneverify
     phone: {
         type: String
     },
     countryCode: {
 
     },
-    password: {
-        type: String,
-        required: true,
-        bcrypt: true
-    },
-    deviceToken: {
-        type: String
-    },
+    // internet call
     amount: {
         type: String
     },
-
-    customerId: {
-        type: String
-    },
+    //authy phone verify
     verified: {
         type: String
     },
@@ -102,61 +135,30 @@ module.exports.createUser = function(newUser,callback){
     });
 };
 module.exports.updateUser = function(newUser,callback){
-    User.findOne({ 'email' :  newUser.email }, function(err, user) {
-        // if there are any errors, return the error before anything else
-        var errors = null;
-        if (err){
-          errors=err;
-        }
-        if (user){
-          if (user._id!=newUser.id){
-            errors='same email already exist!';
-            console.log(errors+"_________________________update user");
-            return callback(errors,null);
-          }else{
-            User.comparePassword(newUser.oldpassword, user.password, function(err, isMatch){
-                if(err) throw err;
-                if(isMatch){
-                  bcrypt.hash(newUser.password, 10, function(err, hash){
-                      if(err) throw err;
-                      console.log(hash+"_________________________update user hash created");
-                      // Set Hashed password
-                      user.password = hash;
-                      user.email = newUser.email;
-                      user.fullname = newUser.fullname;
-                      // Create User
-                      user.save(callback);
-                  });
-                } else {
-                  errors='incorrect password!';
-                  return callback(errors,null);
-                }
-            });
-          }
-        }else{
-          User.findOne({ '_id' :  newUser.id }, function(err, userbyid) {
-            User.comparePassword(newUser.oldpassword, userbyid.password, function(err, isMatch){
-                if(err) throw err;
-                if(isMatch){
-                  bcrypt.hash(newUser.password, 10, function(err, hash){
-                      if(err) throw err;
-                      console.log(hash+"_________________________update user hash created");
-                      // Set Hashed password
-                      userbyid.password = hash;
-                      userbyid.email = newUser.email;
-                      userbyid.fullname = newUser.fullname;
-                      // Create User
-                      userbyid.save(callback);
-                  });
-                } else {
-                  errors='incorrect password!';
-                  return callback(errors,null);
-                }
-            });
+  var conditions = { clientUserId: newUser.clientUserId }
+  , update = newUser
+  , options = { multi: false };
+  User.update(conditions, update, options, callback);
+};
+module.exports.changepassword = function(newUser,callback){
+  User.findOne({ '_id' :  newUser.id }, function(err, userbyid) {
+    User.comparePassword(newUser.oldpassword, userbyid.password, function(err, isMatch){
+        if(err) throw err;
+        if(isMatch){
+          bcrypt.hash(newUser.password, 10, function(err, hash){
+              if(err) throw err;
+              console.log(hash+"_________________________update user hash created");
+              // Set Hashed password
+              userbyid.password = hash;
+              // Create User
+              userbyid.save(callback);
           });
+        } else {
+          errors='incorrect password!';
+          return callback(errors,null);
         }
-
     });
+  });
 };
 // Send a verification token to this user
 module.exports.sendAuthyToken = function(userid,phoneNumber,countryCode,cb) {

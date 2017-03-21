@@ -12,6 +12,7 @@ var authy = require('authy')(auth.AUTHY_API_KEY);
 var twilioconf = require('../../config/twilio/twilioconf');
 var twilioClient = require('twilio')(twilioconf.TWILIO_ACCOUNT_SID, twilioconf.TWILIO_AUTH_TOKEN);
 
+var hyperwalletconf = require('../../config/hyperwalletconf');
 /* GET home page. */
 router.get('/login', function (req, res, next) {
     res.render('auth/login', {title: 'Login Page'});
@@ -77,14 +78,29 @@ router.get('/signup', function (req, res, next) {
 //   failureFlash : true // allow flash messages
 // }));
 router.post('/signup', function (req, res, next) {
-    var fullname = req.body.fullname;
+
     var email = req.body.email;
     var password = req.body.password;
     var password2 = req.body.password2;
-
+    var clientUserId = Math.random().toString(36).substring(7);
+    var firstName = req.body.firstName;
+    var lastName = req.body.lastName;
+    var dateOfBirth = req.body.dateOfBirth;
+    var addressLine1 = req.body.addressLine1;
+    var city = req.body.city;
+    var country = req.body.country;
+    var stateProvince = req.body.stateProvince;
+    var postalCode = req.body.postalCode;
     // Form Validation
 
-    req.checkBody('fullname', 'Name field is required').notEmpty();
+    req.checkBody('firstName', 'First Name field is required').notEmpty();
+    req.checkBody('lastName', 'Last Name field is required').notEmpty();
+    req.checkBody('dateOfBirth', 'DateOfBirth field is required').notEmpty();
+    req.checkBody('addressLine1', 'AddressLine1 field is required').notEmpty();
+    req.checkBody('city', 'City field is required').notEmpty();
+    req.checkBody('country', 'Country field is required').notEmpty();
+    req.checkBody('stateProvince', 'StateProvince field is required').notEmpty();
+    req.checkBody('postalCode', 'PostalCode field is required').notEmpty();
     req.checkBody('email', 'Email field is required').notEmpty();
     req.checkBody('email', 'Email not valid').isEmail();
     req.checkBody('password', 'Password field is required').notEmpty();
@@ -97,35 +113,105 @@ router.post('/signup', function (req, res, next) {
         console.log(errors);
         res.render('auth/signup', {
             errors: JSON.stringify(errors),
-            fullname: fullname,
+            firstName: firstName,
+            lastName: lastName,
+            dateOfBirth: dateOfBirth,
+            addressLine1: addressLine1,
+            city: city,
+            country: country,
+            stateProvince: stateProvince,
+            postalCode: postalCode,
             email: email,
             password: password,
             password2: password2
         });
     } else {
 
-        var newUser = new User({
-            fullname: fullname,
-            email: email,
-            password: password
-        });
         // Create User
-        User.createUser(newUser, function (err, user) {
-            if (err) {
-              var errors=[{'msg':err}];
+        console.log('create hyperwallet node');
+        var Hyperwallet = require('hyperwallet-sdk');
+        var client = new Hyperwallet({ username: hyperwalletconf.username, password: hyperwalletconf.password,
+        programToken: hyperwalletconf.programToken });
+        console.log(dateOfBirth+"dateOfBirth");
+        client.createUser({
+          "clientUserId": clientUserId,
+          "profileType": hyperwalletconf.profileType,
+          "firstName": firstName,
+          "lastName": lastName,
+          "dateOfBirth": dateOfBirth,
+          "email": email,
+          "addressLine1": addressLine1,
+          "city": city,
+          "stateProvince": stateProvince,
+          "country": country,
+          "postalCode": postalCode,
+        }, function(error, body) {
+          // handle response body here
+           if (error) {
+              console.log("Create User Failed");
+
+              for (var i = 0;i<error.length;i++)
+              error[i].msg = error[i].message;
+              console.log(error);
               res.render('auth/signup', {
-                  errors: JSON.stringify(errors),
-                  fullname: fullname,
+                  errors: JSON.stringify(error),
+                  firstName: firstName,
+                  lastName: lastName,
+                  dateOfBirth: dateOfBirth,
+                  addressLine1: addressLine1,
+                  city: city,
+                  country: country,
+                  stateProvince: stateProvince,
+                  postalCode: postalCode,
                   email: email,
                   password: password,
                   password2: password2
               });
-            }else{
-              console.log('----------------------createUser-------------------------');
-              console.log(user);
-              console.log('----------------------createUser end---------------------');
-              res.render('auth/phoneverify', {title: 'Signup Page',usertoverify: user});
-            }
+           } else {
+              console.log("Create User Response");
+              console.log(body);
+              var newUser = new User({
+                  email: email,
+                  password: password,
+                  clientUserId: clientUserId,
+                  firstName: firstName,
+                  lastName: lastName,
+                  dateOfBirth: dateOfBirth,
+                  addressLine1: addressLine1,
+                  city: city,
+                  country: country,
+                  stateProvince: stateProvince,
+                  postalCode: postalCode,
+                  hyperusertoken:body.token,
+                  hyperuserstatus:body.status,
+                  hyperusercreatedon:body.createdOn
+              });
+              console.log(newUser+"______newuser");
+              User.createUser(newUser, function (err, user) {
+                  if (err) {
+                    var errors=[{'msg':err}];
+                    res.render('auth/signup', {
+                        errors: JSON.stringify(errors),
+                        firstName: firstName,
+                        lastName: lastName,
+                        dateOfBirth: dateOfBirth,
+                        addressLine1: addressLine1,
+                        city: city,
+                        country: country,
+                        stateProvince: stateProvince,
+                        postalCode: postalCode,
+                        email: email,
+                        password: password,
+                        password2: password2
+                    });
+                  }else{
+                    // console.log('----------------------createUser-------------------------');
+                    // console.log(user);
+                    // console.log('----------------------createUser end---------------------');
+                    res.render('auth/phoneverify', {title: 'Signup Page',usertoverify: user});
+                  }
+              });
+           }
         });
     }
 });

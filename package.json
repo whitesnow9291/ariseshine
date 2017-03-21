@@ -19,6 +19,7 @@
     "express-messages": "^1.0.1",
     "express-session": "^1.15.1",
     "express-validator": "^3.1.2",
+    "hyperwallet-sdk": "^0.1.1",
     "mongoose": "^4.8.5",
     "morgan": "~1.7.0",
     "passport": "^0.3.2",
