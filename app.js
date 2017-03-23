@@ -137,12 +137,12 @@ function isAuthenticated(req, res, next) {
 
     // CHECK THE USER STORED IN SESSION FOR A CUSTOM VARIABLE
     // you can do this however you want with whatever variables you set up
-    //next();
-    if (req.session.user) {
-        next();
-    } else {
-       res.redirect("/auth/login");
-    }
+    next();
+    // if (req.session.user) {
+    //     next();
+    // } else {
+    //    res.redirect("/auth/login");
+    // }
 }
 
 

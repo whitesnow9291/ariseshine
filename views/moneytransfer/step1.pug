@@ -1,23 +1,54 @@
-//
-  form(action='https://my-server.com', method='POST')
-    script.hw-form-transfer-methods(src='https://api.sandbox.hyperwallet.com/rest/widgets/transfer-methods/usr-ab6cda2c-f2e3-4d1f-99f3-385c5d12cacd/en.min.js', data-hw-template='bootstrap3', data-hw-skipprofilefields='true', data-hw-transfermethodconfiguration='{"profileType": "INDIVIDUAL"}')
+
 #widget
-script(src='https://api.sandbox.hyperwallet.com/rest/widgets/transfer-methods/usr-ab6cda2c-f2e3-4d1f-99f3-385c5d12cacd/en.min.js')
+script(src='https://api.sandbox.hyperwallet.com/rest/widgets/transfer-methods/'+hyperusertoken+'/en.min.js')
 script(type='text/javascript').
-  //create widget
-  var widget = HWWidgets.transferMethods.configure({
-  "template": "bootstrap3",
-  "el": document.getElementById("widget"),
-  "transferMethodConfiguration":{'profileType': 'INDIVIDUAL'},
-  "skipProfileFields":true,
-  "onComplete": function (data) {
-    console.log("Received token: " + data.token);
-    this.setData({});
-    step_widzard.bootstrapWizard('next');
-  },
-  "onError": function (errors, state) {
-    console.log(errors);
-    step_widzard.bootstrapWizard('next')
-  }
-  });
-  widget.create(); //display widget
+    //create widget
+    var hyperun = '#{hyperun}';
+    var hyperpw = '#{hyperpw}';
+    var hyperwallet_moneytransfer_response = null;
+    var hyperusertoken = '#{hyperusertoken}';
+    var widget = HWWidgets.transferMethods.configure({
+    "template": "bootstrap3",
+    "el": document.getElementById("widget"),
+    "skipProfileFields": true,
+      "transferMethodConfiguration": {
+         "profileType": "INDIVIDUAL"
+      },
+    "onComplete": function (data) {
+      $.ajax({
+        type: "POST",
+        url: 'https://api.sandbox.hyperwallet.com/rest/v3/users/'+hyperusertoken+'/transfer-methods',
+
+        contentType:'application/json',
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader ("Authorization", "Basic " + btoa(hyperun + ":" + hyperpw));
+            xhr.setRequestHeader ("Json-Cache-Token", data.token);
+            xhr.setRequestHeader ("Content-Type", "application/json");
+            xhr.setRequestHeader ("Accept", "application/json");
+        },
+        processData: false,
+        data: '{"foo":"bar"}',
+        dataType:'json',
+        success: function(json){
+          console.log(json);
+          hyperwallet_moneytransfer_response = json;
+          step_widzard.bootstrapWizard('next');
+        },
+        error:function(error){
+          console.log(error);
+          var msgs = JSON.parse(error.responseText).errors;
+          for (var i =0;i<msgs.length;i++)
+          toastr.error(msgs[i].message);
+        }
+      });
+      console.log("Received token: " + data.token);
+      hyperwallet_moneytransfer_response = data;
+      this.setData({});
+      /*step_widzard.bootstrapWizard('next');*/
+    },
+    "onError": function (errors, state) {
+      /*step_widzard.bootstrapWizard('next');*/
+      console.log(errors);
+    }
+    });
+    widget.create(); //display widget

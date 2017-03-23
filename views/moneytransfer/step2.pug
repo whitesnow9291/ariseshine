@@ -9,7 +9,7 @@ form#payment-form(action="/myaccount/addfund/checkouts", method="post")
         input#amount(name="amount" type="tel" min="1" placeholder="Amount" value="10")
 
   button.btn.btn-primary.button(type="submit")
-    span Test Transaction
+    span Submit
 script(src="https://js.braintreegateway.com/js/braintree-2.27.0.min.js")
 script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js")
 script.
@@ -27,13 +27,27 @@ script.
           data: {'payment_method_nonce':payment_method_nonce,'amount':amount},
           success: function(json){
             if (json.result==1){
-              step_widzard.bootstrapWizard('next');
+              $.post("/moneytransfer/post_hyper_pay", {
+                hyperwallet_moneytransfer_response: hyperwallet_moneytransfer_response,
+                hyperusertoken:hyperusertoken,
+                amount:amount
+                }, function(data) {
+                // Set up the Twilio Client Device with the token
+                if (data.result=='success'){
+                  step_widzard.bootstrapWizard('next');
+                }else{
+                  for (var i =0;i<data.msg.length;i++)
+                  toastr.error(data.msg[i].message);
+                }
+                
+              });
+              
             }else{
-              alert(json.msg);
+              toastr.error(json.msg);
             }
           },
           error:function(error){
-            alert(error);
+            toastr.error(error);
           },
           dataType: 'json'
         });

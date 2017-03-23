@@ -3,7 +3,8 @@ var express = require('express');
 var router = express.Router();
 var braintree = require('braintree');
 var gateway = require('../../config/braintree/gateway');
-
+var User = require('../../models/user');
+var hyperwalletconf = require('../../config/hyperwalletconf');
 var TRANSACTION_SUCCESS_STATUSES = [
   braintree.Transaction.Status.Authorizing,
   braintree.Transaction.Status.Authorized,
@@ -52,9 +53,36 @@ router.get('/', function(req, res, next) {
     res.render('moneytransfer/index', { title: 'Money Transfer' });
 });
 router.get('/moneytransfer', function(req, res, next) {
-  gateway.clientToken.generate({}, function (err, response) {
-    res.render('moneytransfer/moneytransfer', {clientToken: response.clientToken, messages: req.flash('error')});
-  });
+
+      gateway.clientToken.generate({}, function (err, response) {
+        var Hyperwallet = require('hyperwallet-sdk');
+        var client = new Hyperwallet({ username: hyperwalletconf.username, password: hyperwalletconf.password,
+            programToken: hyperwalletconf.programToken });
+
+        client.createUser({
+          "clientUserId": Math.random().toString(36).substring(7),
+          "profileType": hyperwalletconf.profileType,
+          "firstName": "John",
+          "lastName": "Deer",
+          "dateOfBirth": "1978-01-03",
+          "email": Math.random().toString(36).substring(7)+"@hyperwallet.com",
+          "addressLine1": "600 Main Street",
+          "city": "Los Angeles",
+          "stateProvince": "CA",
+          "country": "US",
+          "postalCode": "90012",
+        }, function(error, body) {
+          // handle response body here
+          console.log(error+"__________error____________");
+          console.log(body+"___________body___________");
+          if (error){
+            res.render('moneytransfer/moneytransfer', {result:false, messages: error});
+          }else{
+            res.render('moneytransfer/moneytransfer', {result:true,clientToken: response.clientToken, hyperusertoken:body.token,
+                                                        hyperun:hyperwalletconf.username,hyperpw:hyperwalletconf.password});
+          }
+        });
+      });
 });
 router.post('/post_moneytransfer', function (req, res) {//4111111111111111
   var transactionErrors;
@@ -76,5 +104,30 @@ router.post('/post_moneytransfer', function (req, res) {//4111111111111111
     }
   });
 });
-
+router.post('/post_hyper_pay', function (req, res) {//4111111111111111
+  var hyperwallet_moneytransfer_response = req.body.hyperwallet_moneytransfer_response;
+  var hyperusertoken = req.body.hyperusertoken;
+  var amount = req.body.amount;
+  console.log(hyperwallet_moneytransfer_response);
+  var Hyperwallet = require('hyperwallet-sdk');
+  var client = new Hyperwallet({ username: hyperwalletconf.username, password: hyperwalletconf.password,
+  programToken: hyperwalletconf.programToken });
+  console.log(hyperwallet_moneytransfer_response+"-------------------------------------------hyperwallet client");
+  client.createPayment({
+    "clientPaymentId": Math.random().toString(36).substring(7),
+    "amount": amount,
+    "currency": hyperwallet_moneytransfer_response.transferMethodCurrency,
+    "purpose": "OTHER",
+    "destinationToken": hyperusertoken
+  }, function(error, body) {
+    // handle response body here
+    console.log(error+"__________________createpayment error __________________");
+    console.log(body+"__________________createpayment body__________________");
+    if (error){
+      return res.json({'result':'error',msg:error});
+    }else{
+      return res.json({'result':'success',msg:'successfully transfered'});
+    }
+  });
+});
 module.exports = router;

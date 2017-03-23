@@ -1,6 +1,12 @@
 .top-bar {
   position: static; }
 
+section:nth-of-type(odd) {
+  background: none; }
+
+form#payment-form section {
+  padding-top: 0px; }
+
 .overlay-bar .menu li a:hover {
   color: #ef6e19; }
 
